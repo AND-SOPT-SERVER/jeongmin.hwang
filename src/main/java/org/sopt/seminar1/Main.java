@@ -66,9 +66,9 @@ public class Main {
                 case RUNNING -> {
                     switch (selected) {
                         case "GET" -> {
-                            server.getList().forEach(line -> {
+                            server.getList().forEach(diary -> {
                                 try {
-                                    ConsoleIO.printLine(line);
+                                    ConsoleIO.printLine(diary.getId() + " : " + diary.getBody());
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }

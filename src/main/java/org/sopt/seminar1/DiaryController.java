@@ -19,20 +19,23 @@ public class DiaryController {
     }
 
     // APIS
-    final List<String> getList() {
-        return;
+    final List<Diary> getList() {
+        return diaryService.getAllPost();
     }
 
     final void post(final String body) {
-
+        if(body.length() > 30){
+            throw new RuntimeException("30자 이내로 작성해주세요.");
+        }
+        this.diaryService.savePost(body);
     }
 
     final void delete(final String id) {
-
+        this.diaryService.deletePost(Long.parseLong(id));
     }
 
     final void patch(final String id, final String body) {
-
+        this.diaryService.updatePost(Long.parseLong(id), body);
     }
 
     enum Status {
