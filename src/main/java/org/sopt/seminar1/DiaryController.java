@@ -35,6 +35,9 @@ public class DiaryController {
     }
 
     final void patch(final String id, final String body) {
+        if(body.length() > 30){
+            throw new RuntimeException("30자 이내로 작성해주세요.");
+        }
         this.diaryService.updatePost(Long.parseLong(id), body);
     }
 
