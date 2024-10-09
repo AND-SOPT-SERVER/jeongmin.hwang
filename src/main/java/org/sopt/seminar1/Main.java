@@ -3,6 +3,8 @@ package org.sopt.seminar1;
 import org.sopt.seminar1.DiaryController;
 
 import java.io.*;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -28,6 +30,7 @@ public class Main {
     static class DiaryUI implements UI {
         private final DiaryController server;
         private String selected;
+        final DiaryLocalRepository local = new DiaryLocalRepository();
 
         public DiaryUI(DiaryController server) throws IOException {
             this.server = server;
@@ -36,7 +39,13 @@ public class Main {
         }
 
         public void runRepeatedly() throws IOException {
-
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                System.out.println("프로그램이 종료되기 직전에 실행됩니다.");
+                //여기에 로컬 저장 코드를 넣는다.
+                Map<Long, String> diaryMap = this.server.getList().stream()
+                        .collect(Collectors.toMap(Diary::getId, Diary::getBody));
+                this.local.localSave(diaryMap);
+            }));
             do {
                 if (onMenu()) {
                     ConsoleIO.printLine("");

@@ -7,9 +7,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DiaryRepository {
-    private final Map<Long, String> storage = new ConcurrentHashMap<>();
+    private Map<Long, String> storage;
     private final Map<Long, String> trashCan = new ConcurrentHashMap<>();
-    private final AtomicLong numbering = new AtomicLong();
+    private final AtomicLong numbering;
+
+    public DiaryRepository() {
+        DiaryLocalRepository local = new DiaryLocalRepository();
+        System.out.println("localget: " + local.localGet());
+        this.storage = local.localGet();
+        Long maxKey = this.storage.keySet().stream()
+                .max(Long::compare)
+                .orElse(null);
+        if (maxKey == null) {
+            maxKey = 0L;
+        }
+        this.numbering = new AtomicLong(maxKey);
+    }
 
     Long savePost(String input){
         final long id = numbering.addAndGet(1);
