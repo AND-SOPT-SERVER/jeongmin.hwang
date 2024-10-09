@@ -24,10 +24,18 @@ public class DiaryController {
     }
 
     final void post(final String body) {
-        if(body.length() > 30){
-            throw new RuntimeException("30자 이내로 작성해주세요.");
+
+        try{
+            byte[] utf8Bytes = body.getBytes("UTF-8");
+            String utf8String = new String(utf8Bytes, "UTF-8");
+            if(utf8String.codePointCount(0, utf8String.length()) > 30){
+                throw new RuntimeException("30자 이내로 작성해주세요.");
+            }
+            this.diaryService.savePost(utf8String);
         }
-        this.diaryService.savePost(body);
+        catch (Exception e){
+            throw new RuntimeException("UTF-8 인코딩 에러");
+        }
     }
 
     final void delete(final String id) {
