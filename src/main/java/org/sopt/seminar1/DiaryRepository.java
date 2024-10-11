@@ -13,7 +13,6 @@ public class DiaryRepository {
 
     public DiaryRepository() {
         DiaryLocalRepository local = new DiaryLocalRepository();
-        System.out.println("localget: " + local.localGet());
         this.storage = local.localGet();
         Long maxKey = this.storage.keySet().stream()
                 .max(Long::compare)
