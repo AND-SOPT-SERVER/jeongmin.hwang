@@ -1,11 +1,18 @@
 package org.sopt.diary.service;
 
+import org.sopt.diary.dto.DiaryDetailResponse;
+import org.sopt.diary.dto.DiaryResponse;
+import org.sopt.diary.dto.DiaryUpdate;
 import org.sopt.diary.repository.DiaryEntity;
 import org.sopt.diary.repository.DiaryRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DiaryService {
@@ -15,17 +22,57 @@ public class DiaryService {
         this.diaryRepository = diaryRepository;
     }
 
-    public void createDiary() {
-        diaryRepository.save(new DiaryEntity("정민"));
+    public void createDiary(DiaryEntity diaryEntity) {
+        diaryRepository.save(diaryEntity);
     }
 
-    public List<Diary> getList(){
-        final List<DiaryEntity> diaryEntityList = diaryRepository.findAll();
-        final List<Diary> diaryList = new ArrayList<>();
+    public void updateDiary(long id, DiaryUpdate diaryUpdate) {
+        final Optional<DiaryEntity> diaryEntityOptional = diaryRepository.findById(id);
+        if (diaryEntityOptional.isEmpty()) {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+        }
+        final DiaryEntity diaryEntity = diaryEntityOptional.get();
+        if (diaryUpdate.getTitle() != null) {
+            diaryEntity.setTitle(diaryUpdate.getTitle());
+        }
+        else if(diaryUpdate.getContent() != null) {
+            diaryEntity.setContent(diaryUpdate.getContent());
+        }
+        else{
+            return;
+        }
+        diaryRepository.save(diaryEntity);
+    }
 
-        for(DiaryEntity diaryEntity : diaryEntityList) {
-            diaryList.add(new Diary(diaryEntity.getId(), diaryEntity.getName()));
+    public void deleteDiary(long id) {
+        final Optional<DiaryEntity> diaryEntityOptional = diaryRepository.findById(id);
+        if (diaryEntityOptional.isEmpty()) {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+        }
+        diaryRepository.deleteById(id);
+    }
+
+    public List<DiaryResponse> getList(){
+        final List<DiaryEntity> diaryEntityList = diaryRepository.findAll();
+        final List<DiaryResponse> diaryList = new ArrayList<>();
+        diaryEntityList.sort(Comparator.comparing(DiaryEntity::getCreatedAt).reversed());
+        int cnt = 0;
+        for(DiaryEntity diaryEntity : diaryEntityList){
+            if (cnt >= 10){
+                break;
+            }
+            diaryList.add(new DiaryResponse(diaryEntity.getId(), diaryEntity.getName()));
+            cnt++;
         }
         return diaryList;
+    }
+
+    public DiaryDetailResponse getOne(long id){
+        final Optional<DiaryEntity> diaryEntityOptional = diaryRepository.findById(id);
+        if (diaryEntityOptional.isEmpty()) {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+        }
+        final DiaryEntity diaryEntity = diaryEntityOptional.get();
+        return new DiaryDetailResponse(diaryEntity.getId(), diaryEntity.getName(), diaryEntity.getTitle(), diaryEntity.getContent(), diaryEntity.getCreatedAt());
     }
 }

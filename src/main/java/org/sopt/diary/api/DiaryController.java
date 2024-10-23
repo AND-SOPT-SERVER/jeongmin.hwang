@@ -1,14 +1,15 @@
 package org.sopt.diary.api;
 
+import org.sopt.diary.dto.DiaryDetailResponse;
+import org.sopt.diary.dto.DiaryResponse;
+import org.sopt.diary.dto.DiaryUpdate;
 import org.sopt.diary.repository.DiaryEntity;
-import org.sopt.diary.service.Diary;
 import org.sopt.diary.service.DiaryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,18 +19,35 @@ public class DiaryController {
     public DiaryController(DiaryService diaryService) {
         this.diaryService = diaryService;
     }
-    @PostMapping("/post")
-    void post() {
-        diaryService.createDiary();
+
+    @GetMapping("/diary")
+    ResponseEntity<List<DiaryResponse>> getDiary() {
+        return ResponseEntity.ok(diaryService.getList());
     }
 
-    @GetMapping("/post")
-    ResponseEntity<DiaryListReponse> get() {
-        List<Diary> diaryList = diaryService.getList();
-        List<DiaryResponse> diaryResponseList = new ArrayList<>();
-        for(Diary diary : diaryList) {
-            diaryResponseList.add(new DiaryResponse(diary.getId(), diary.getName()));
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/diary")
+    void createDiary(@RequestBody DiaryEntity diaryEntity) {
+        if (diaryEntity.getContent().length() > 30) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Content is too long");
         }
-        return ResponseEntity.ok(new DiaryListReponse(diaryResponseList));
+        diaryService.createDiary(diaryEntity);
+    }
+
+    @GetMapping("/diary/{id}")
+    ResponseEntity<DiaryDetailResponse> getOneDiary(@PathVariable final long id) {
+        return ResponseEntity.ok(diaryService.getOne(id));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/diary/{id}")
+    void updateDiary(@PathVariable final long id, @RequestBody DiaryUpdate diaryUpdate) {
+        diaryService.updateDiary(id, diaryUpdate);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/diary/{id}")
+    void updateDiary(@PathVariable final long id) {
+        diaryService.deleteDiary(id);
     }
 }
