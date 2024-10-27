@@ -42,6 +42,9 @@ public class DiaryController {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/diary/{id}")
     void updateDiary(@PathVariable final long id, @RequestBody DiaryUpdate diaryUpdate) {
+        if (diaryUpdate.getContent() != null && diaryUpdate.getContent().length() > 30) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Content is too long");
+        }
         diaryService.updateDiary(id, diaryUpdate);
     }
 

@@ -1,5 +1,6 @@
 package org.sopt.diary.service;
 
+import org.sopt.diary.api.DiaryController;
 import org.sopt.diary.dto.DiaryCreate;
 import org.sopt.diary.dto.DiaryDetailResponse;
 import org.sopt.diary.dto.DiaryResponse;
@@ -10,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class DiaryService {
@@ -24,6 +22,9 @@ public class DiaryService {
     }
 
     public void createDiary(DiaryCreate diaryCreate) {
+        this.diaryRepository.findByTitle(diaryCreate.getTitle()).ifPresent(diaryEntity -> {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Title is already exist");
+        });
         DiaryEntity diaryEntity = new DiaryEntity(diaryCreate.getName(), diaryCreate.getTitle(), diaryCreate.getContent());
         diaryRepository.save(diaryEntity);
     }
@@ -33,7 +34,13 @@ public class DiaryService {
         if (diaryEntityOptional.isEmpty()) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
         }
+
         final DiaryEntity diaryEntity = diaryEntityOptional.get();
+
+        if (Math.abs(new Date().getTime() - diaryEntity.getUpdatedAt().getTime()) < 5 * 60 * 1000) {
+            throw new HttpClientErrorException(HttpStatus.TOO_MANY_REQUESTS, "조금 뒤에 다시 시도해주세요");
+        }
+
         if (diaryUpdate.getTitle() != null) {
             diaryEntity.setTitle(diaryUpdate.getTitle());
         }
@@ -75,6 +82,7 @@ public class DiaryService {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
         }
         final DiaryEntity diaryEntity = diaryEntityOptional.get();
+        System.out.println("updated at: " + diaryEntity.getUpdatedAt());
         return new DiaryDetailResponse(diaryEntity.getId(), diaryEntity.getName(), diaryEntity.getTitle(), diaryEntity.getContent(), diaryEntity.getCreatedAt());
     }
 }

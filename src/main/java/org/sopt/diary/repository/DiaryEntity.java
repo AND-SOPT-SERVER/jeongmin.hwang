@@ -62,9 +62,12 @@ public class DiaryEntity {
 
     public void setContent(String content){
         this.content = content;
+        this.contentLength = content.length();
+        this.updatedAt = new Date();
     }
 
     public void setTitle(String title){
         this.title = title;
+        this.updatedAt = new Date();
     }
 }
