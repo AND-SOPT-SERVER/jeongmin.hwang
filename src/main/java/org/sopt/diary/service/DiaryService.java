@@ -1,5 +1,6 @@
 package org.sopt.diary.service;
 
+import org.sopt.diary.dto.DiaryCreate;
 import org.sopt.diary.dto.DiaryDetailResponse;
 import org.sopt.diary.dto.DiaryResponse;
 import org.sopt.diary.dto.DiaryUpdate;
@@ -22,7 +23,8 @@ public class DiaryService {
         this.diaryRepository = diaryRepository;
     }
 
-    public void createDiary(DiaryEntity diaryEntity) {
+    public void createDiary(DiaryCreate diaryCreate) {
+        DiaryEntity diaryEntity = new DiaryEntity(diaryCreate.getName(), diaryCreate.getTitle(), diaryCreate.getContent());
         diaryRepository.save(diaryEntity);
     }
 

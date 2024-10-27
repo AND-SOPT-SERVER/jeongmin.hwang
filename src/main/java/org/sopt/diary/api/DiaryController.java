@@ -1,9 +1,9 @@
 package org.sopt.diary.api;
 
+import org.sopt.diary.dto.DiaryCreate;
 import org.sopt.diary.dto.DiaryDetailResponse;
 import org.sopt.diary.dto.DiaryResponse;
 import org.sopt.diary.dto.DiaryUpdate;
-import org.sopt.diary.repository.DiaryEntity;
 import org.sopt.diary.service.DiaryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +27,11 @@ public class DiaryController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/diary")
-    void createDiary(@RequestBody DiaryEntity diaryEntity) {
-        if (diaryEntity.getContent().length() > 30) {
+    void createDiary(@RequestBody DiaryCreate diaryCreate) {
+        if (diaryCreate.getContent().length() > 30) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Content is too long");
         }
-        diaryService.createDiary(diaryEntity);
+        diaryService.createDiary(diaryCreate);
     }
 
     @GetMapping("/diary/{id}")
