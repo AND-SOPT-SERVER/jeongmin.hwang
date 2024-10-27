@@ -1,4 +1,4 @@
-package org.sopt.diary.repository;
+package org.sopt.seminar2.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;

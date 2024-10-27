@@ -1,4 +1,4 @@
-package org.sopt.diary.dto;
+package org.sopt.seminar2.dto;
 
 import java.util.Date;
 

@@ -1,11 +1,11 @@
-package org.sopt.diary.api;
+package org.sopt.seminar2.api;
 
-import org.sopt.diary.dto.DiaryCreate;
-import org.sopt.diary.dto.DiaryDetailResponse;
-import org.sopt.diary.dto.DiaryResponse;
-import org.sopt.diary.dto.DiaryUpdate;
-import org.sopt.diary.repository.Category;
-import org.sopt.diary.service.DiaryService;
+import org.sopt.seminar2.dto.DiaryCreate;
+import org.sopt.seminar2.dto.DiaryDetailResponse;
+import org.sopt.seminar2.dto.DiaryResponse;
+import org.sopt.seminar2.dto.DiaryUpdate;
+import org.sopt.seminar2.repository.Category;
+import org.sopt.seminar2.service.DiaryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

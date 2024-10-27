@@ -1,12 +1,12 @@
-package org.sopt.diary.service;
+package org.sopt.seminar2.service;
 
-import org.sopt.diary.dto.DiaryCreate;
-import org.sopt.diary.dto.DiaryDetailResponse;
-import org.sopt.diary.dto.DiaryResponse;
-import org.sopt.diary.dto.DiaryUpdate;
-import org.sopt.diary.repository.Category;
-import org.sopt.diary.repository.DiaryEntity;
-import org.sopt.diary.repository.DiaryRepository;
+import org.sopt.seminar2.dto.DiaryCreate;
+import org.sopt.seminar2.dto.DiaryDetailResponse;
+import org.sopt.seminar2.dto.DiaryResponse;
+import org.sopt.seminar2.dto.DiaryUpdate;
+import org.sopt.seminar2.repository.Category;
+import org.sopt.seminar2.repository.DiaryEntity;
+import org.sopt.seminar2.repository.DiaryRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;

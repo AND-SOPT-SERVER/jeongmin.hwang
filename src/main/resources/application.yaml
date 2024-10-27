@@ -10,5 +10,5 @@ spring:
       ddl-auto: create
       dialect: org.hibernate.dialect.H2Dialect
     properties:
-      fromat_sql: true
+      format_sql: true
       show_sql: true

@@ -1,6 +1,6 @@
-package org.sopt.diary.dto;
+package org.sopt.seminar2.dto;
 
-import org.sopt.diary.repository.Category;
+import org.sopt.seminar2.repository.Category;
 
 import java.util.Date;
 

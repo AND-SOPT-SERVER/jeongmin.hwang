@@ -1,4 +1,4 @@
-package org.sopt.diary.repository;
+package org.sopt.seminar2.repository;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
