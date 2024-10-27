@@ -4,6 +4,7 @@ import org.sopt.diary.dto.DiaryCreate;
 import org.sopt.diary.dto.DiaryDetailResponse;
 import org.sopt.diary.dto.DiaryResponse;
 import org.sopt.diary.dto.DiaryUpdate;
+import org.sopt.diary.repository.Category;
 import org.sopt.diary.service.DiaryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,8 @@ public class DiaryController {
     }
 
     @GetMapping("/diary")
-    ResponseEntity<List<DiaryResponse>> getDiary() {
-        return ResponseEntity.ok(diaryService.getList());
+    ResponseEntity<List<DiaryResponse>> getDiary(@RequestParam Category category) {
+        return ResponseEntity.ok(diaryService.getList(category));
     }
 
     @ResponseStatus(HttpStatus.CREATED)

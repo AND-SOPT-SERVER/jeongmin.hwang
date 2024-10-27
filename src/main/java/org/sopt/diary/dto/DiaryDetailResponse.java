@@ -1,18 +1,22 @@
 package org.sopt.diary.dto;
 
+import org.sopt.diary.repository.Category;
+
 import java.util.Date;
 
 public class DiaryDetailResponse {
     private long id;
     private String name;
     private String title;
+    public Category category;
     private String content;
     private Date createdAt;
 
-    public DiaryDetailResponse(long id, String name, String title, String content, Date createdAt) {
+    public DiaryDetailResponse(long id, String name, String title, Category category, String content, Date createdAt) {
         this.id = id;
         this.name = name;
         this.title = title;
+        this.category = category;
         this.content = content;
         this.createdAt = createdAt;
     }
@@ -27,6 +31,10 @@ public class DiaryDetailResponse {
 
     public String getTitle() {
         return title;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public String getContent() {

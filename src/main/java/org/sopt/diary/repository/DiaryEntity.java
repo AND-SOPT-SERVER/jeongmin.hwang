@@ -16,18 +16,19 @@ public class DiaryEntity {
 
     public String name;
     public String title;
+    public Category category;
     public String content;
     public int contentLength;
     public Date createdAt;
     public Date updatedAt;
 
-    public DiaryEntity(String name, String title, String content) {
+    public DiaryEntity(String name, String title, Category category, String content) {
         this.name = name;
         this.title = title;
+        this.category = category;
         this.content = content;
         this.contentLength = content.length();
         this.createdAt = new Date();
-        this.updatedAt = new Date();
     }
 
     public DiaryEntity() { }
@@ -42,6 +43,10 @@ public class DiaryEntity {
 
     public String getTitle(){
         return this.title;
+    }
+
+    public Category getCategory(){
+        return this.category;
     }
 
     public String getContent(){
@@ -69,5 +74,9 @@ public class DiaryEntity {
     public void setTitle(String title){
         this.title = title;
         this.updatedAt = new Date();
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
