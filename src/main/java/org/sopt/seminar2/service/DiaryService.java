@@ -61,7 +61,7 @@ public class DiaryService {
         diaryRepository.deleteById(id);
     }
 
-    public List<DiaryResponse> getList(Category category){
+    public List<DiaryResponse> getList(Category category, String sort){
         List<DiaryEntity> diaryEntityList;
         if (category != null){
             diaryEntityList = diaryRepository.findByCategory(category);
@@ -71,7 +71,16 @@ public class DiaryService {
         }
 
         final List<DiaryResponse> diaryList = new ArrayList<>();
-        diaryEntityList.sort(Comparator.comparing(DiaryEntity::getCreatedAt).reversed());
+        if (sort.equals("date")){
+            diaryEntityList.sort(Comparator.comparing(DiaryEntity::getCreatedAt).reversed());
+        }
+        else if (sort.equals("length")){
+            diaryEntityList.sort(Comparator.comparing(DiaryEntity::getContentLength).reversed());
+        }
+        else{
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "잘못된 정렬 방식입니다.");
+        }
+
         int cnt = 0;
         for(DiaryEntity diaryEntity : diaryEntityList){
             if (cnt >= 10){

@@ -22,8 +22,8 @@ public class DiaryController {
     }
 
     @GetMapping("/diary")
-    ResponseEntity<List<DiaryResponse>> getDiary(@RequestParam Category category) {
-        return ResponseEntity.ok(diaryService.getList(category));
+    ResponseEntity<List<DiaryResponse>> getDiary(@RequestParam(required = false) Category category, @RequestParam(defaultValue = "date") String sort) {
+        return ResponseEntity.ok(diaryService.getList(category, sort));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
